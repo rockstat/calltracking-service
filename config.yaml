@@ -1,0 +1,26 @@
+# set name of your service
+name: ctrack
+
+# default paramenters
+env: {{ ENV }}
+listen: "{{ HOST|default('0.0.0.0')}}:{{PORT|default(8080) }}"
+redis_dsn: "{{ REDIS_DSN|default('redis://redis:6379') }}"
+ch_dsn: "{{CHP_DSN|default('http://default:default@host:9090') }}"
+
+# Listen all events
+rpc_params:
+  listen_all: yes
+
+# Project for limitation
+project_id: 1382996643
+
+# Phones pool
+phones:
+  dyn_phones:
+    - 74994031705
+    - 74994040139
+    - 74994040921
+    - 74994033095
+    - 74994040239
+    - 74994041156
+  fallback: null
