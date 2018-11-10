@@ -14,47 +14,9 @@ git clone
 ### Connect your VOIP service
 
 In this example was used Zadarma VOIP service provider
-
-Generate service zadarma 
-
-```py
-# Rockstat Zadarma calls service
-# (c) Dmitry Rodin 2018
-# ---------------------
-
-from band import expose, logger, response, rpc, settings
-
-START_EVENT = 'NOTIFY_START'
-CALLTRACKING = 'calltracking'
-USER_BY_PHONE = 'user_by_phone'
+Setup `ztrack` service too. https://github.com/rockstat/voip-zadarma-service
 
 
-@expose.handler()
-async def main(key, data, **params):
-    """
-    Handle zadarma validation webhook
-    """
-    logger.info('request', data=data, key=key)
-    zd_echo = data.pop('zd_echo', None)
-    if zd_echo:
-        return response.data(zd_echo)
-    return {}
-
-
-@expose.enricher(props=settings.props, keys=settings.use_keys)
-async def enrich(phone, event, key, **params):
-    """
-    Handle incoming calls
-    """
-    if key in settings.use_keys and phone and event == START_EVENT:
-        user = await rpc.request(CALLTRACKING, USER_BY_PHONE, phone=phone)
-        uid = user.get('uid', None)
-        sess_no = user.get('sess_no', None)
-        if uid:
-            return {'uid': str(uid), 'sess_no': sess_no}
-    return {}
-
-```
 
 ### Define phone pool
 
@@ -82,9 +44,14 @@ phones:
 
 ### Front-end
 
+To use `demo` website create file in Theia `public/box-demo.js` and add content
 Put this code after `rstat('configure'...)`.
 
 ```js
+// Rockstat
+
+// HERE actual version of snippet with configuration and pageview
+
 rstat('onReady', function(){
     var formatPhone = function(num){
       return num.replace(/(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/, '+$1($2) $3-$4-$5')
