@@ -16,12 +16,11 @@ async def user_by_phone(phone, **params):
     """
     Find user by number
     """
-    phone = int(phone)
     logger.info('user_by_phone', phone=phone)
     for uid, user in state.users.items():
         if phone == user.phone and user.sess_no:
             return dict(uid=uid, sess_no=user.sess_no)
-        logger.warn('sess_no set', uid=uid)
+        logger.warn('cant find associated session', uid=uid, phone=phone)
 
 
 @expose.handler()
